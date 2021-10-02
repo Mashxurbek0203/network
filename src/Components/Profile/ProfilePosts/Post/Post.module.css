@@ -1,0 +1,27 @@
+.postWrap {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.postImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.postInner {
+  margin-left: 20px;
+}
+
+.postLikeBtn {
+  outline: unset;
+  border: 2px inset transparent;
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.postLikeBtn:active {
+  border: 2px inset rgb(73, 66, 66);
+}

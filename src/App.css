@@ -1,0 +1,39 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+}
+
+.main-wrapper {
+  max-width: 90vw;
+  margin: 0 auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-areas: 
+  "site-header site-header"
+  "site-nav site-content"
+  ;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  grid-gap: 10px;
+  box-shadow: 0 0 15px #fff;
+  background: #98de5b;
+}
+
+.main-header {
+  grid-area: site-header;
+}
+
+.site-nav {
+  grid-area: site-nav;
+}
+
+.site-content {
+  grid-area: site-content;
+}

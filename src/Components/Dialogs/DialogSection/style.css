@@ -1,0 +1,38 @@
+.dialogs{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  /* grid-template-rows: 12fr; */
+  grid-template-areas: 'd m';
+  height: 100%;
+  border: 3px solid #fff;
+}
+
+.message__input-wrap {
+  display: flex;
+  width: 100%;
+}
+
+.message__input {
+  display: inline-block;
+  flex: 1;
+  padding: 7px;
+}
+
+.message__submit-btn {
+  display: inline-block;
+  border: 1px solid transparent;
+  color: #fff;
+  font-weight: 500;
+  outline: unset;
+  background: rgb(0, 174, 255);
+  padding: 10px;
+}
+
+.message__submit-btn:hover {
+  border-color: #000;
+}
+
+.messages {
+  overflow-y: auto;
+  height: 74vh;
+}

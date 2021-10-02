@@ -1,0 +1,32 @@
+.profileNewPost {
+  border-top: 2px solid #000;
+  margin-top: 20px;
+  padding-top: 15px;
+}
+
+.newPostInput {
+  padding: 5px;
+  display: block;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.newPostSubmitBtn {
+  padding: 5px;
+  outline: unset;
+  border: none;
+  border-radius: 8px;
+}
+
+.newPostInputWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.profilePostsWrap {
+  margin-top: 30px;
+}
+
+.profilePostsList {
+  list-style: none;
+}

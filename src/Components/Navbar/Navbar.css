@@ -1,0 +1,36 @@
+.site-nav {
+  padding: 15px 0;
+  background: #98de5b;
+  border-top:8px solid #fff;
+  border-left:8px solid #fff;
+  border-right:8px solid #fff;
+  overflow-x: hidden;
+}
+
+.site-nav__list {
+  list-style: none;
+}
+
+.site-nav__link {
+  padding: 0 30px;
+  display: inline-block;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  width: 100%;
+  text-decoration: none;
+  color: #fff; 
+}
+
+.site-nav__link:hover {
+  box-shadow: -3px 0 5px 3px #fff;
+  transform: scale(1.2);
+}
+
+.site-nav__link.active {
+  background: #c05151;
+  box-shadow: -3px 0 5px 2px #813867;
+}
+
+.site-nav__item:not(:last-child) {
+  margin-bottom: 15px;
+}

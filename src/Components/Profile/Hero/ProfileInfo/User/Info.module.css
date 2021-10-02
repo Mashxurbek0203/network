@@ -1,0 +1,30 @@
+.userWrapper {
+  display: flex;
+  margin-top: 50px;
+}
+
+.userImg {
+  width: 150px;
+  border-radius: 50%;
+  margin-right: 80px;
+}
+
+.userInfo {
+  font-size: 24px;
+}
+
+.userInfoName {
+  margin-bottom: 80px;
+  font-size: 36px;
+  margin: 0;
+  padding: 0;
+}
+
+.userContactsWrap {
+  margin-left: auto;
+}
+
+.userContactsTitle {
+  font-style: 20px;
+
+}

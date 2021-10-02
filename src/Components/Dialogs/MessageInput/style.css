@@ -1,0 +1,25 @@
+.message__input-wrap {
+  display: flex;
+  width: 100%;
+  margin-top: auto;
+}
+
+.message__input {
+  display: inline-block;
+  flex: 1;
+  padding: 7px;
+}
+
+.message__submit-btn {
+  display: inline-block;
+  border: 1px solid transparent;
+  color: #fff;
+  font-weight: 500;
+  outline: unset;
+  background: rgb(0, 174, 255);
+  padding: 10px;
+}
+
+.message__submit-btn:hover {
+  border-color: #000;
+}

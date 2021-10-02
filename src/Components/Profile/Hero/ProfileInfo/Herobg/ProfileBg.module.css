@@ -1,0 +1,6 @@
+.profileHeroImg {
+  width: 90%;  
+  height: 250px;
+  object-fit: fill;
+  border-radius: 10px;
+}

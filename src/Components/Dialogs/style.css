@@ -1,0 +1,8 @@
+.dialogs{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  /* grid-template-rows: 12fr; */
+  grid-template-areas: 'd m';
+  height: 100%;
+  border: 3px solid #fff;
+}
