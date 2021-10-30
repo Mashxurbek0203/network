@@ -1,6 +1,77 @@
+import React from 'react'
 import { connect } from 'react-redux';
-import { addPostCreator, updatePostTextCreator } from '../../../reducers/profileReducer';
+import { compose } from 'redux';
+import { addProfilePost } from '../../../reducers/profileReducer';
 import PostsSection from './PostsSection';
+
+let mapStateToProps = (state) => {
+  let profilePage = state.profilePage
+  return {
+    posts: profilePage.posts
+  }
+}
+
+
+export default compose(
+  connect(mapStateToProps, {addProfilePost})
+)(PostsSection)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const PostsSectionContainer = (props) => {
 //   let state = props.store.getState()
@@ -20,27 +91,3 @@ import PostsSection from './PostsSection';
 //                         newPostText={state.profilePage.newPostText}/>
 
 // }
-
-let mapStateToProps = (state) => {
-  let profilePage = state.profilePage
-  return {
-    posts: profilePage.posts,
-    newPostText: profilePage.newPostText
-  }
-}
-
-let mapDispatchToProps = (dispatch) => {
-  return {
-    onBtnClick() {
-      dispatch(addPostCreator())
-    },
-    onInputChange(text) {
-      let action  = updatePostTextCreator(text)
-      dispatch(action)
-    }
-  }
-} 
-
-const PostsSectionContainer = connect(mapStateToProps, mapDispatchToProps)(PostsSection)
-
-export default PostsSectionContainer

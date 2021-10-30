@@ -2,7 +2,12 @@
   width: 50px;
 }
 
+.header__link {
+  background: unset;
+}
+
 .main-header {
+  width: 100%;
   background: #98de5b;
   box-shadow:  0 5px 5px #fff;
 }

@@ -1,38 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { usersAPI } from '../../DAL/API'
-import { setAuthUserData} from '../../reducers/authReducer'
+import { authUserThunk, logoutUser } from '../../reducers/authReducer'
 import Header from './Header'
 
 class HeaderContainer extends React.Component {
-  componentDidMount() {
-    usersAPI.authUser()
-    .then(data => {
-      if(data.resultCode === 0) {
-        let {email, id, login} = data.data
-        this.props.setAuthUserData(id, login,email)
-      }
-    })
-  }
   onLoginBtnClicked = () => {
-    usersAPI.authUser()
-    .then(data => {
-      if(data.resultCode === 0) {
-        let {email, id, login} = data.data
-        this.props.setAuthUserData(id, login,email)
-      }
-    })
+    this.props.authUserThunk()
+  }
+  onLogoutBtnClicked = () => {
+    this.props.logoutUser()
   }
   render() {
-    return <Header {...this.props} onLoginBtnClicked={this.onLoginBtnClicked}/>
+    return <Header {...this.props} onLoginBtnClicked={this.onLoginBtnClicked} onLogoutBtnClicked={this.onLogoutBtnClicked}/>
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    login: state.auth.login
+    login: state.auth.login,
+    isAuth: state.auth.isAuth
   }
 }
 
 
-export default connect(mapStateToProps, {setAuthUserData})(HeaderContainer)
+export default connect(mapStateToProps, {authUserThunk, logoutUser})(HeaderContainer)

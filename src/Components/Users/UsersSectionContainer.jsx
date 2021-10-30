@@ -1,51 +1,29 @@
-import axios from "axios"
 import React from "react"
 import { connect } from "react-redux"
-import { follow, setPageNumber, setUsers, setUsersCount, toggleIsFetching, unfollow } from "../../reducers/usersReducer"
+import { compose } from "redux"
+import { follow, unfollow, requestUsers, changePage} from "../../reducers/usersReducer"
+import withAuthRedirect from "../HOC/withRedirect"
 import UsersSection from "./UsersSection"
-import { usersAPI } from '../../DAL/API';
+import { getUsers, getPageSize, getTotalUsersCount, getCurrentPage, getIsFetching, getFollowingIsLoading, getUsersSuper } from './../../selectors/selectors';
 
 class UsersSectionContainer extends React.Component{
   
 
   componentDidMount(){
-    this.props.toggleIsFetching(true)
-    usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
-    .then(data => {
-      this.props.toggleIsFetching(false)
-      this.props.setUsers(data.items)
-      this.props.setUsersCount(data.totalCount)
-    })
+    this.props.requestUsers(this.props.currentPage, this.props.pageSize)
   }  
   onPageBtnClicked = (number) =>{
-    debugger
-    this.props.toggleIsFetching(true)
-    this.props.setPageNumber(number)
-    usersAPI.getUsers(number,this.props.pageSize)
-    .then(data => {
-              this.props.toggleIsFetching(false)
-              this.props.setUsers(data.items)
-              this.props.setUsersCount(data.totalCount)
-            })
+    this.props.changePage(number, this.props.pageSize)
   }
   onUnfollow = (userId) => {
-    usersAPI.unFollowUser(userId)
-              .then(data => {
-              if(data.resultCode === 0) {
-                this.props.unfollow(userId)
-              }
-            })
+    this.props.unfollow(userId)
   }
   onFollow = (userId) => {
-    usersAPI.followUser(userId)
-      .then(data => {
-        if(data.resultCode === 0) {
-            this.props.follow(userId)
-        }
-      })
+    this.props.follow(userId)
   }
   
   render() {
+    console.log('Render Users');
     return <UsersSection  onPageBtnClicked={this.onPageBtnClicked}
                           users={this.props.users}     
                           totalUsersCount={this.props.totalUsersCount}
@@ -54,34 +32,23 @@ class UsersSectionContainer extends React.Component{
                           isFetching={this.props.isFetching}
                           onFollow={this.onFollow}
                           onUnfollow={this.onUnfollow}
+                          isFollowDisabled={this.props.followingIsLoading}
     />
   }
 }
-
-
-
-
 let mapStateToProps = (state) => {
+  console.log('mapstateTopProps Users');
   return{
-    users: state.users.users,
-    pageSize: state.users.pageSize,
-    totalUsersCount: state.users.totalUsersCount,
-    currentPage: state.users.currentPage,
-    isFetching: state.users.isFetching
+    users: getUsersSuper(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingIsLoading: getFollowingIsLoading(state),
   }
 }
-// let mapDispatchToProps = (dispatch) => {
-//   return {
-//     follow: (userId) => dispatch(follow(userId)),
-//     unfollow: (userId) => dispatch(unfollow(userId)),
-//     setUsers: (users) => dispatch(setUsers(users)),
-//     setUsersCount: (usersCount) => dispatch(setUsersCount(usersCount)),
-//     setPageNumber: (pageNumber) => dispatch(setPageNumber(pageNumber)),
-//     toggleIsFetching: (isFetching) => dispatch(toggleIsFetching(isFetching))
-//   }
-// }
 
-
-
-
-export default connect(mapStateToProps,{follow, unfollow, setUsers, setUsersCount, setPageNumber, toggleIsFetching})(UsersSectionContainer)
+export default compose(
+  connect(mapStateToProps,{follow, unfollow,requestUsers, changePage}),
+  withAuthRedirect
+)(UsersSectionContainer)

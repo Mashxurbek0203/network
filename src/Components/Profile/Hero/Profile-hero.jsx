@@ -5,7 +5,7 @@ const ProfileHero = ( props) => {
     <>
     <div className="profile__hero">
     <HeroBg/>
-    <UserInfo profile={props.profile}/>
+    <UserInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus} />
     </div>
     </>
   );

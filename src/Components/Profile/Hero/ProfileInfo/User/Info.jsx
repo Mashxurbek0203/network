@@ -1,13 +1,13 @@
-import Preloader from '../../../../common/Preloader/Preloader'
 import style from './Info.module.css'
 import anonymous from '../../../../../assets/images/user.png'
+import Preloader from './../../../../common/Preloader/Preloader';
+import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
 function UserInfo(props) {
   let profile = props.profile
   if(!props.profile) {
     return <Preloader/>
   }
-  
   return (
     <>
     <div className={style.userWrapper}>
@@ -23,6 +23,7 @@ function UserInfo(props) {
       <ul className={style.userContactsList}></ul>
     </div>
     </div>
+    <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus} />
     </>
   )
 }

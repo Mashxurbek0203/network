@@ -1,16 +1,11 @@
-import { createRef } from 'react'
 import Dialog from '../Dialog/Dialog'
 import Messages from '../Messages/Messages'
-import './style.css'
+import './Dialogs.css'
+import { NewMessageFormRedux } from './DialogsForm/DialogsForm';
 
 function DialogsSection (props) {
-  let messageInput = createRef()
-  const onMessageInputChange = (evt) => {
-    debugger
-    props.messageInputChange(evt.target.value)
-  }
-  const onSendMessage = () => {
-    props.sendMessage(messageInput)
+  const onSendMessage = (values) => {
+    props.addMessage(values.newMessageBody)
   }
 return (
 <>
@@ -38,24 +33,15 @@ return (
         }
       </div>
       <div className="message__input-wrap">
-      <input 
-      type="text" 
-      placeholder="Enter your message..." 
-      className="message__input" 
-      value={props.dialogs.newMessageText}
-      onChange={onMessageInputChange}
-      ref={messageInput}
-      />
-      <button 
-      type="button" 
-      className="message__submit-btn" 
-      onClick={onSendMessage}
-      >Send</button>
+      <NewMessageFormRedux onSubmit={onSendMessage}/>
     </div>
     </div>
   </section>
 </>
 )
 }
+
+
+
 
 export default DialogsSection

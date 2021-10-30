@@ -1,0 +1,7 @@
+.formInput {
+  border: 2px solid transparent;
+}
+
+.formControl.error .formInput {
+  border: 2px solid red;
+}

@@ -3,6 +3,7 @@ import DialogsSectionContainer from '../Dialogs/DialogSection/DialogsSectionCont
 import './Main.css'
 import UsersSectionContainer from '../Users/UsersSectionContainer'
 import ProfileCotntainer from '../Profile/ProfileCotntainer';
+import Login from '../Login/Login';
 const Main = (props) => {
 
   
@@ -19,6 +20,7 @@ const Main = (props) => {
       <Route path="/messages" render={() => <DialogsSectionContainer 
       />} />
       <Route path="/users" render={() => <UsersSectionContainer/>}/>
+      <Route path="/login" render={() => <Login/>} exact/>
     </div>
     </>
   )

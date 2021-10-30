@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
-import { addMessageCreator, updateNewMessageTextCreator } from '../../../reducers/dialogsReducer'
 import DialogsSection from './DialogsSection'
+import { addMessage } from './../../../reducers/dialogsReducer';
+import withAuthRedirect from '../../HOC/withRedirect';
+import { compose } from 'redux';
 
 // function DialogsSectionContainer (props) {
 //   let state = props.store.getState()
@@ -25,17 +27,9 @@ let mapStateToProps = (state) => {
     dialogs: state.chatPage
   }
 }
-let mapDispatchToProps = (dispatch) => {
-  return {
-    messageInputChange: (body) => {
-      dispatch(updateNewMessageTextCreator(body))
-    },
-    sendMessage: () => {
-      dispatch(addMessageCreator())
-    }
-  }
-}
 
-const DialogsSectionContainer = connect(mapStateToProps,mapDispatchToProps)(DialogsSection)
 
-export default DialogsSectionContainer
+export default compose(
+  connect(mapStateToProps,{addMessage}),
+  withAuthRedirect
+)(DialogsSection)

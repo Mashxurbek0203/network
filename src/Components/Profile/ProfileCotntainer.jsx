@@ -1,23 +1,26 @@
 import React from "react"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
-import { usersAPI } from "../../DAL/API"
-import { setProfile } from "../../reducers/profileReducer"
 import Profile from "./Profile"
-import { toggleIsFetching } from "../../reducers/usersReducer"
+import { getProfile, updateStatus, getStatus } from './../../reducers/profileReducer';
+import withAuthRedirect from "../HOC/withRedirect";
+import { compose } from "redux";
 class ProfileContainer extends React.Component {
   componentDidMount() {
-    this.props.toggleIsFetching(true)
     let userId = this.props.match.params.userId
-    usersAPI.userProfile(userId, this.props.personalId)
-    .then(response => {
-      this.props.setProfile(response.data)
-      this.props.toggleIsFetching(true)
-    })
+    if(!userId) {
+      userId = this.props.personalId
+    }
+    this.props.getProfile(userId)
+    this.props.getStatus(userId)
   }
 
   render(){
-  return <Profile {...this.props} profile={this.props.profile}/>
+  return <Profile {...this.props} profile={this.props.profile} 
+                  isProfileLoading={this.props.isProfileLoading} 
+                  updateStatus={this.props.updateStatus}
+                  status={this.props.status}
+                  />
 }
 }
 
@@ -25,9 +28,12 @@ let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
     personalId: state.auth.id,
-    isFetching: state.users.isFetching
+    isProfileLoading: state.profilePage.isProfileLoading,
+    status: state.profilePage.status,
   }
 }
-let WithRouterProfileContainer = withRouter(ProfileContainer)
-
-export default connect(mapStateToProps,{setProfile, toggleIsFetching})(WithRouterProfileContainer)
+export default compose(
+  withRouter,
+  connect(mapStateToProps,{getProfile, updateStatus, getStatus}),
+  withAuthRedirect
+)(ProfileContainer)

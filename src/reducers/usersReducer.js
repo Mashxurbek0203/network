@@ -1,9 +1,13 @@
+import { usersAPI } from './../DAL/API';
+import { modifyUserObj } from './../utils/validators/actionsOveruserObj';
 let initialState = {
   users: [],
   pageSize: 15,
   totalUsersCount: 0,
   currentPage: 1,
-  isFetching: false
+  isFetching: false,
+  followingIsLoading: [],
+  fake:10 
 }
 const FOLLOW_AT = 'FOLLOW'
 const UNFOLLOW_AT = 'UNFOLLOW'
@@ -11,19 +15,21 @@ const SET_USERS_AT = 'SET_USERS'
 const SET_USERS_COUNT_AT = 'SET_USERS_COUNT'
 const SET_PAGE_NUMBER_AT = 'SET_PAGE_NUMBER'
 const TOGGLE_IS_FETCHING_AT = 'TOGGLE_IS_FETCHING'
+const TOGGLE_IS_FOLLOWING_LOADING = 'TOGGLE_IS_FOLLOWING_LOADING'
 
 const usersReducer = (state = initialState, action) => {
   switch(action.type) {
-    case FOLLOW_AT:{
-      let stateCopy = {
-        ...state,
-        users: state.users.map(user => user.id === action.id ? {...user, followed: true} : user)
-      }
-      return stateCopy;}
-    case UNFOLLOW_AT:
+    case "FAKE": 
+    return {...state, fake: state.fake + 1}
+    case FOLLOW_AT:
       return {
         ...state,
-        users: state.users.map(user => user.id === action.id ? {...user, followed: false} : user)
+        users: modifyUserObj(state.users, "id", action.id, {followed: true})
+      }
+      case UNFOLLOW_AT:
+        return {
+          ...state,
+          users: modifyUserObj(state.users, "id", action.id, {followed: false})
       }
     case SET_USERS_AT:
       return{
@@ -45,49 +51,61 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         isFetching: action.isFetching
       }
+    case TOGGLE_IS_FOLLOWING_LOADING:
+      return{
+        ...state,
+        followingIsLoading: action.isFetching 
+                            ? [...state.followingIsLoading, action.userId] 
+                            : state.followingIsLoading.filter(id => id !== action.userId) 
+      }
+
     default: return state;
   }
 }
-export const follow = (id) => ({type: FOLLOW_AT, id})
-export const unfollow = (id) => ({type: UNFOLLOW_AT, id})
+export const followSuccess = (id) => ({type: FOLLOW_AT, id})
+export const unfollowSuccess = (id) => ({type: UNFOLLOW_AT, id})
 export const setUsers = (users) => ({type: SET_USERS_AT, users})
 export const setUsersCount = (usersCount)=> ({type: SET_USERS_COUNT_AT, usersCount})
 export const setPageNumber = (number)=> ({type: SET_PAGE_NUMBER_AT, pageNumber: number})
 export const toggleIsFetching = (isFetching)=> ({type: TOGGLE_IS_FETCHING_AT, isFetching})
+export const toggleFollowingIsLoading = (isFetching, userId)=> ({type: TOGGLE_IS_FOLLOWING_LOADING, isFetching, userId})
+
+
+export const requestUsers = (currentPage, pageSize) => async(dispatch) => {
+  dispatch(toggleIsFetching(true))
+  const getUsersResponse = await usersAPI.getUsers(currentPage, pageSize)
+  dispatch(toggleIsFetching(false))
+  dispatch(setUsers(getUsersResponse.items))
+  dispatch(setUsersCount(getUsersResponse.totalCount))
+
+}
+export const changePage = (currentPage, pageSize) => async(dispatch) => {
+  dispatch(toggleIsFetching(true))
+  dispatch(setPageNumber(currentPage))
+  const getUsersResponse = await usersAPI.getUsers(currentPage, pageSize)
+  dispatch(toggleIsFetching(false))
+  dispatch(setUsersCount(getUsersResponse.totalCount))
+  dispatch(setUsers(getUsersResponse.items))
+}
+
+
+const addUserToFollowedSuperior = async(dispatch, userId, requestApi, actionCreator) => {
+  dispatch(toggleFollowingIsLoading(true, userId))
+  const actionOverUserResponse = await requestApi(userId)
+  if(actionOverUserResponse.resultCode === 0){
+    dispatch(actionCreator(userId))
+  }
+  dispatch(toggleFollowingIsLoading(false, userId))
+}
+
+export const follow = (userId) => (dispatch) => {
+  addUserToFollowedSuperior(dispatch, userId, usersAPI.followUser.bind(usersAPI), followSuccess)
+}
+
+
+
+export const unfollow = (userId) => (dispatch)=> {
+  addUserToFollowedSuperior(dispatch, userId, usersAPI.unfollowUser.bind(usersAPI), unfollowSuccess)
+}
+
 export default usersReducer
-
-
-
-
-
-
-
-
-//   {name: 'Dima', 
-  //   img: 'https://images.unsplash.com/photo-1543337676-7712b5028449?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1033&q=80', 
-  //   id: 1, location: { country: 'Belarus', city: 'Minsk'},
-  //   subtext: "Hey I'm a programmer...",
-  //   followed:false,
-  //   styleClass:'follow'
-  // },
-  //   {name: 'Sergei', 
-  //   img: 'https://images.unsplash.com/photo-1543337676-7712b5028449?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1033&q=80', 
-  //   id: 2, location: { country: 'Russia', city: 'Moscow'},
-  //   subtext: "Hey I'm a designer...",
-  //   followed:false,
-  //   styleClass:'follow'
-  // },
-  //   {name: 'Sasha', 
-  //   img: 'https://images.unsplash.com/photo-1543337676-7712b5028449?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1033&q=80', 
-  //   id: 3, location: { country: 'Ukraine', city: 'Kiev'},
-  //   subtext: "Hey I'm a manager...",
-  //   followed:false,
-  //   styleClass:'follow'
-  // },
-  //   {name: 'Vladilen', 
-  //   img: 'https://images.unsplash.com/photo-1543337676-7712b5028449?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1033&q=80', 
-  //   id: 4, location: { country: 'Russia', city: 'Siberia'},
-  //   subtext: "Hey I'm a full-stack programmer...",
-  //   followed:false,
-  //   styleClass:'follow',
-  // }

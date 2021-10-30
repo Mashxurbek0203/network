@@ -1,19 +1,38 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import './App.css';
-// import AuthenticationContainer from './Components/Auth/AuthenticationContainer';
-// import Header from './Components/Header/Header';
+// import AuthenticationContainer from './Component
 import HeaderContainer from './Components/Header/HeaderContainer';
 import Main from './Components/Main/Main';
 import Navbar from './Components/Navbar/Nabar';
+import { initialize } from './reducers/appReducer';
+import { withRouter } from 'react-router';
+import Preloader from './Components/common/Preloader/Preloader';
 
-function App(props) {
+class App extends React.Component {
+  componentDidMount(){
+    this.props.initialize()
+  }
+  render() {
+    if(!this.props.isInitialized) {return <Preloader/>}
   return (
     <div className="main-wrapper">
     <HeaderContainer/>
     <Navbar/>
-    <Main state={props.state} dispatch={props.dispatch} store={props.store}/>
-    {/* <AuthenticationContainer/> */}
+    <Main/>
     </div>
     );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isInitialized: state.app.isInitialized
+  }
+}
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {initialize})
+)(App);

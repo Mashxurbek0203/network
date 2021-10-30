@@ -1,29 +1,43 @@
-import { createRef } from 'react';
+import React from 'react';
 import Post from './Post/Post';
 import style from './ProfilePosts.module.css'
-const PostsSection = (props) => {
-  let newPost  = createRef()
-  const btnClick = () => {
-    props.onBtnClick(newPost)
-  }
+import { NewPostReduxForm } from './../Form/ProfileForm';
 
-  const inputChange = (event) => {
-    props.onInputChange(event.target.value)
+
+// class PostsSection extends React.Component{
+//   addNewPost = (values) => {
+//     this.props.addProfilePost(values.newPostText)
+//   }
+//   shouldComponentUpdate(nextProps, nextState) {
+//     return nextProps === this.props || nextState === this.state
+//   }
+//   render() {
+//     console.log(this.props);
+  
+//   return (
+//     <>
+//     <div className={style.profileNewPost}>
+//       <NewPostReduxForm onSubmit={this.addNewPost}/>
+//     </div>
+//     <div className={style.profilePostsWrap}>
+//     <ul className={style.profilePostsList}>
+//       {
+//         this.props.posts.map(post => <Post img={post.img} text={post.text} likesCount={post.likesCount} id={post.id} key={post.id} />)
+//       }
+//     </ul>
+//     </div>
+//     </>
+//   );}
+// }
+
+const PostsSection = React.memo((props) => {
+  const addNewPost = (values) => {
+    props.addProfilePost(values.newPostText)
   }
   return (
     <>
     <div className={style.profileNewPost}>
-        <div className="new-post__input-wrap"
-        >
-          <input type="text"
-          className={style.newPostInput}
-          placeholder="New post text..."
-          ref={newPost}
-          value={props.newPostText}
-          onChange={inputChange}
-          />
-        </div> <br/>
-        <button type="button" className={style.newPostSubmitBtn} onClick={btnClick}>Submit post</button>
+      <NewPostReduxForm onSubmit={addNewPost}/>
     </div>
     <div className={style.profilePostsWrap}>
     <ul className={style.profilePostsList}>
@@ -34,6 +48,22 @@ const PostsSection = (props) => {
     </div>
     </>
   );
-}
+})
 
 export default PostsSection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
