@@ -4,7 +4,7 @@ import { compose } from "redux"
 import { follow, unfollow, requestUsers, changePage} from "../../reducers/usersReducer"
 import withAuthRedirect from "../HOC/withRedirect"
 import UsersSection from "./UsersSection"
-import { getUsers, getPageSize, getTotalUsersCount, getCurrentPage, getIsFetching, getFollowingIsLoading, getUsersSuper } from './../../selectors/selectors';
+import {  getPageSize, getTotalUsersCount, getCurrentPage, getIsFetching, getFollowingIsLoading, getUsersSuper } from './../../selectors/selectors';
 
 class UsersSectionContainer extends React.Component{
   
